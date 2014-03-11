@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>175BCA55-029B-4816-A5D7-9BCA76584BE4</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FBC Youth</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>3109AA64-286A-43A2-81ED-C1E3039B8D37</key>
+		<string>https://github.com/zachstegall/Cityouth.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>FBC Youth.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>3109AA64-286A-43A2-81ED-C1E3039B8D37</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/zachstegall/Cityouth.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>3109AA64-286A-43A2-81ED-C1E3039B8D37</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>3109AA64-286A-43A2-81ED-C1E3039B8D37</string>
+			<key>IDESourceControlWCCName</key>
+			<string>FBC Youth</string>
+		</dict>
+	</array>
+</dict>
+</plist>
