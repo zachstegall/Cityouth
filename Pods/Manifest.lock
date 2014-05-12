@@ -17,11 +17,17 @@ PODS:
   - AFNetworking/Serialization (2.1.0)
   - AFNetworking/UIKit (2.1.0):
     - AFNetworking/NSURLConnection
+  - SAMCache (0.3.0)
+  - SAMGradientView (0.2.1)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
+  - SAMCache
+  - SAMGradientView
 
 SPEC CHECKSUMS:
   AFNetworking: c7d7901a83f631414c7eda1737261f696101a5cd
+  SAMCache: 82ab8d9c26319d7544a35c6eeafe574c3ba2f7d2
+  SAMGradientView: ab5543a14a69ecf5fc10239091740291c50b328c
 
 COCOAPODS: 0.29.0

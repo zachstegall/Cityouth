@@ -18,9 +18,10 @@
         _textView = [[UITextView alloc] init];
         _textView.editable = NO;
         _textView.font = [UIFont fontWithName:@"Verdana" size:18.0f];
-        _textView.textColor = UIColorFromRGB(0x222222);
+        _textView.textColor = [UIColor whiteColor];
         _textView.scrollEnabled = NO;
         _textView.returnKeyType = UIReturnKeyDone;
+        self.textView.backgroundColor = [UIColor clearColor];
     }
     return self;
 }

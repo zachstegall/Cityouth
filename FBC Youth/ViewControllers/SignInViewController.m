@@ -10,7 +10,7 @@
 #import "HomeViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 
-#define ServerApiURL @"http://198.58.106.245/youth/index.php"
+#define ServerApiURL @"http://198.58.106.245/youth/testindex.php"
 
 @interface SignInViewController ()
 {
@@ -51,7 +51,6 @@
     
     [self performSelector:@selector(fadeInLabelsAndTextFields) withObject:nil afterDelay:1.0f];
     
-    // Do any additional setup after loading the view from its nib.
 }
 
 -(void)imageViewAllocation
@@ -115,8 +114,6 @@
 - (void)signInClick:(id)sender
 {
     if ([_key.text isEqualToString:@"MVyouthFBC"] || [_key.text isEqualToString:@"MVadminFBC1819"]) {
-        // ** Insert to DB ** //
-        
         [[NSUserDefaults standardUserDefaults] setObject:@"y" forKey:@"actualtoken"];
         if ([[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"] == NULL) {
             [[NSUserDefaults standardUserDefaults] setObject:[self createUUID] forKey:@"UUID"];

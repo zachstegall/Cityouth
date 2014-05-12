@@ -7,6 +7,9 @@
 //
 
 #import "Profile.h"
+#import "TalkController.h"
+
+#import <SAMCache/SAMCache.h>
 
 @implementation Profile
 
@@ -22,6 +25,8 @@
         _objective = @"";
         _versequote = @"";
         _location = @"";
+        _imagepath = @"";
+//        _profileImage = [[UIImage alloc] init];
     }
     return self;
 }
@@ -49,8 +54,18 @@
     if ([dict objectForKey:@"versequote"] != (id)[NSNull null])
         _versequote = [dict objectForKey:@"versequote"];
     
-    if ([dict objectForKey:@"location" ] != (id)[NSNull null])
+    if ([dict objectForKey:@"location"] != (id)[NSNull null])
         _location = [dict objectForKey:@"location"];
+    
+    if ([dict objectForKey:@"imagepath"] != (id)[NSNull null]) {
+        _imagepath = [dict objectForKey:@"imagepath"];
+    }
+    
+//    NSString *imageName = [NSString stringWithFormat:@"%@%@%@", self.firstName, self.lastName, @".png"];
+//    NSData *prof = [[SAMCache sharedCache] objectForKey:imageName];
+//    if (prof) {
+//        self.profileImage = [UIImage imageWithData:prof];
+//    }
 }
 
 @end

@@ -14,6 +14,8 @@
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
 #import "WallViewController.h"
+#import "PopupViewController.h"
+#import "SuccessView.h"
 #import "NavigationDelegate.h"
 #import "ToggleDelegate.h"
 #import "EditTableDelegate.h"
@@ -21,10 +23,6 @@
 #import "SignedInDelegate.h"
 #import "RideDelegate.h"
 #import "PushRideDelegate.h"
-#import "AFHTTPRequestOperationManager.h"
-
-#define ServerApiURL @"http://198.58.106.245/youth/index.php"
-#define ServerNotificationApiURL @"http://198.58.106.245/youth/sendnotifications.php"
 
 @interface NavigationController : UINavigationController<NavigationDelegate, ToggleDelegate, EditTableDelegate, ReloadDataDelegate, SignedInDelegate, RideDelegate, PushRideDelegate>
 
@@ -39,13 +37,16 @@
 @property (nonatomic, strong) NSMutableArray *viewCtrlsArray;
 @property (nonatomic, strong) NSMutableDictionary *youthData;
 @property (nonatomic, strong) NSMutableDictionary *wallData;
-@property (nonatomic, strong) UIActivityIndicatorView *spinner;
+@property (nonatomic) SuccessView *successView;
+//@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 // Public Methods
--(void)loadData;
--(void)pushNotification:(NSString *)type text:(NSString *)message;
--(void)busRide;
--(void)newWallPostInBack;
--(void)newWallPostInFore;
+- (void)loadData;
+- (void)editedForTableComplete: (BOOL)success items:(NSArray *)items;
+- (void)answeredRideComplete: (BOOL)success answer:(NSString *)answer;
+- (void)pushNotification:(NSString *)type text:(NSString *)message;
+- (void)busRide;
+- (void)newWallPostInBack;
+- (void)newWallPostInFore;
 
 @end

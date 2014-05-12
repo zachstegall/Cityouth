@@ -22,7 +22,7 @@
         _name.textColor = [UIColor whiteColor];
         [self addSubview:_name];
         
-        self.backgroundColor = UIColorFromRGB(0xF7941E);
+        self.backgroundColor = [UIColor clearColor];
         [self setSelectionStyle:UITableViewCellSelectionStyleDefault];
     }
     return self;

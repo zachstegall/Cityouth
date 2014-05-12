@@ -7,11 +7,15 @@
 //
 
 #import "NavigationController.h"
+#import "TalkController.h"
+
+#import <SAMCache/SAMCache.h>
 
 @interface NavigationController ()
 {
     NSInteger toggle;
 }
+
 @end
 
 @implementation NavigationController
@@ -23,11 +27,13 @@
         // Custom initialization
         toggle = 0;
         [self SignInViewControllerAllocation];
-        [self spinnerAllocation];
         
         [self setNeedsStatusBarAppearanceUpdate];
         
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"]) {
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"signkey"] != nil &&
+            [[NSUserDefaults standardUserDefaults] objectForKey:@"first"] != nil &&
+            [[NSUserDefaults standardUserDefaults] objectForKey:@"last"] != nil &&
+            [[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"] != nil) {
             [self HomeViewControllerAllocation];
             [self ProfileViewControllerAllocation];
             [self WallViewControllerAllocation];
@@ -61,6 +67,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    self.successView = [[SuccessView alloc] initWithFrame:CGRectMake(self.view.center.x - 50.0f, self.view.center.y - 50.0f, 80.0f, 80.0f)];
 }
 
 -(void)SignInViewControllerAllocation
@@ -101,13 +109,6 @@
     _PopViewC = [[PopupViewController alloc] initWithNibName:nil bundle:nil];
     _PopViewC.view.tag = 17;
     [_PopViewC setDelegate:self];
-}
-
--(void)spinnerAllocation
-{
-    _spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [_spinner setCenter:CGPointMake(([UIScreen mainScreen].bounds.size.width/2), 42.0f)];
-    [self.view addSubview:_spinner];
 }
 
 #pragma mark - Orientation and Style
@@ -232,90 +233,13 @@
     [self loadData];
 }
 
-// ProfileViewC or WallViewC could be the caller
-//    -- inserts into wall table in DB for wall posts
-//       or updates tokens_tbl in DB for profile
--(void)didEditForTable:(NSArray *)items
-{
-    if ([[items objectAtIndex:0] isEqualToString:@"insert"]) {
-        
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        NSDictionary *params = @{@"msg": [items objectAtIndex:1],
-                                 @"type": [items objectAtIndex:2],
-                                 @"date": [NSDate date]};
-        [_spinner startAnimating];
-        [manager POST:ServerApiURL parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            [self loadData];
-            
-            // Send Notification about Post
-            [self pushNotification:[items objectAtIndex:2] text:[items objectAtIndex:1]];
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            //NSLog(@"Error: %@", error);
-            [_spinner stopAnimating];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unable to post at this time. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
-            [alert show];
-        }];
-        
-    } else if ([[items objectAtIndex:0] isEqualToString:@"update"]) {
-        
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        NSDictionary *params = @{@"first": [items objectAtIndex:1],
-                                 @"last": [items objectAtIndex:2],
-                                 @"excited": [items objectAtIndex:3],
-                                 @"obj": [items objectAtIndex:4],
-                                 @"verseq": [items objectAtIndex:5],
-                                 @"token": [items objectAtIndex:6]};
-        [_spinner startAnimating];
-        [manager POST:ServerApiURL parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            [self loadData];
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            //NSLog(@"Error: %@", error);
-            [_spinner stopAnimating];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unable to edit profile at this time. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
-            [alert show];
-        }];
-        
-    }
-}
-
 // SignViewC will be the caller
 -(void)didFinishSigningIn
 {
     [self finishInit];
     [self loadData];
-    [self.navigationController setViewControllers:[NSArray arrayWithObject:_HomeViewC] animated:YES];
-    [self pushViewController:_HomeViewC animated:YES];
-}
-
-// PopupViewC will be the caller
-//    -- allows us to gather ride necessities and locations
--(void)didFinishAnsweringRide:(NSString *)location item:(NSString *)answer
-{
-    UIActivityIndicatorView *popSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [_PopViewC.view addSubview:popSpinner];
-    [popSpinner setCenter:CGPointMake(140.0f, 69.0f)];
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *params = @{@"loc": location,
-                             @"token": [[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"]};
-    [popSpinner startAnimating];
-    [manager POST:ServerApiURL parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [popSpinner stopAnimating];
-        if ([answer isEqualToString:@"y"]) {
-            _PopViewC.view.frame = CGRectMake(_PopViewC.view.frame.origin.x, _PopViewC.view.frame.origin.y+118.0f, _PopViewC.view.frame.size.width,
-                                              _PopViewC.view.frame.size.height - 98.0f);
-        }
-        [[self.topViewController.view viewWithTag:17] removeFromSuperview];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        [popSpinner stopAnimating];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Message was not sent. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
-        [alert show];
-    }];
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:self.HomeViewC] animated:YES];
+    [self pushViewController:self.HomeViewC animated:YES];
 }
 
 // WallViewC will be the caller
@@ -325,25 +249,104 @@
     [self pushNotification:@"Bus Ride" text:message];
 }
 
+// ProfileViewC or WallViewC could be the caller
+//    -- inserts into wall table in DB for wall posts
+//       or updates tokens_tbl in DB for profile
+-(void)didEditForTable: (NSArray *)items
+{
+    [TalkController editedDataForTable:self editItems:items];
+}
+
+-(void)editedForTableComplete: (BOOL)success items:(NSArray *)items
+{
+    if ([[items objectAtIndex:0] isEqualToString:@"insert"]) {
+        
+        if (success) {
+            [self loadData];
+            
+            // Send Notification about Post
+            [self pushNotification:[items objectAtIndex:2] text:[items objectAtIndex:1]];
+        } else {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unable to post at this time. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
+            [alert show];
+        }
+        
+    } else if ([[items objectAtIndex:0] isEqualToString:@"delete"]) {
+        
+        if (success) {
+            [self loadData];
+        } else {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unable to delete post at this time. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
+            [alert show];
+        }
+        
+    } else if ([[items objectAtIndex:0] isEqualToString:@"update"]) {
+        
+        if (success) {
+            [self loadData];
+            
+//            NSString *name = [NSString stringWithFormat:@"%@%@%@", [items objectAtIndex:1], @" ", [items objectAtIndex:2]];
+//            [self pushNotification:name text:@"updated profile!"];
+        } else {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unable to edit profile at this time. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
+            [alert show];
+        }
+        
+    }
+}
+
+// PopupViewC will be the caller
+//    -- allows us to gather ride necessities and locations
+-(void)didFinishAnsweringRide:(NSString *)location item:(NSString *)answer
+{
+    [TalkController answeredRide:self location:location item:answer];
+}
+
+-(void)answeredRideComplete:(BOOL)success answer:(NSString *)answer
+{
+    if (success) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if ([answer isEqualToString:@"y"]) {
+            _PopViewC.view.frame = CGRectMake(_PopViewC.view.frame.origin.x, _PopViewC.view.frame.origin.y+118.0f, _PopViewC.view.frame.size.width,
+                                              _PopViewC.view.frame.size.height - 98.0f);
+        }
+        [[self.topViewController.view viewWithTag:17] removeFromSuperview];
+    } else {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Message was not sent. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
+        [alert show];
+    }
+}
+
 // loads all data from the tables wall and tokens_tbl from MySQL
 -(void)loadData
 {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *params = @{@"selectall": @""};
-    [_spinner startAnimating];
-    [manager POST:ServerApiURL parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSMutableDictionary *temp = responseObject;
-        _youthData = [temp objectForKey:@"0"];
-        _wallData = [temp objectForKey:@"1"];
-        
-        [_HomeViewC dishOutHomeData:_youthData];
-        [_ProfileViewC dishOutProfileData:_youthData];
-        [_WallViewC dishOutWallData:_wallData];
-        
-        [_spinner stopAnimating];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        [_spinner stopAnimating];
+    NSDictionary *prof = [[SAMCache sharedCache] objectForKey:@"data"];
+    if (prof) {
+        [self.HomeViewC dishOutHomeData:prof[@"0"]];
+        [self.ProfileViewC dishOutProfileDataCache:prof[@"0"]];
+        [self.WallViewC dishOutWallData:prof[@"1"]];
+    }
+    
+    [TalkController loadAllData:^(NSDictionary *response) {
+        if (response) {
+            self.youthData = [response objectForKey:@"0"];
+            self.wallData = [response objectForKey:@"1"];
+            [self.HomeViewC dishOutHomeData:self.youthData];
+            [self.ProfileViewC dishOutProfileData:self.youthData];
+            [self.WallViewC dishOutWallData:self.wallData];
+        } else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Load was unsuccessful. Please refresh." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
+            [alert show];
+        }
     }];
 }
 
@@ -352,19 +355,22 @@
 {
     NSString *title = [type capitalizedString];
     message = [NSString stringWithFormat:@"%@%@%@", title, @": ", message];
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *params = @{@"message": message};
-    [_spinner startAnimating];
-    [manager POST:ServerNotificationApiURL parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [_spinner stopAnimating];
-        [_WallViewC.navigationItem.rightBarButtonItem setTintColor:[UIColor greenColor]];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [_spinner stopAnimating];
-        [_WallViewC.navigationItem.rightBarButtonItem setTintColor:[UIColor redColor]];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Notifications were not sent. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
-        [alert show];
+    [TalkController sendPushNotification:self text:message completion:^(BOOL success) {
+        if (success) {
+            //[UIApplication sharedApplication].applicationIconBadgeNumber =
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            [self.view addSubview:self.successView];
+            [UIView animateWithDuration:1.0f delay:2.0f options:UIViewAnimationOptionAllowAnimatedContent animations:^{
+                [self.successView setAlpha:0.0f];
+            } completion:^(BOOL finished) {
+                [self.successView removeFromSuperview];
+            }];
+        } else {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Notifications were not sent. Please try again." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
+            [alert show];
+        }
     }];
 }
 

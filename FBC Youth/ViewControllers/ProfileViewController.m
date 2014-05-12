@@ -7,8 +7,15 @@
 //
 
 #import "ProfileViewController.h"
-#import "TriangleProfile.h"
 #import "ProfileCell.h"
+#import "ImageScale.h"
+#import "TalkController.h"
+#import "ImagePresentingViewController.h"
+
+#import <AFNetworking/AFHTTPRequestOperationManager.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <SAMGradientView/SAMGradientView.h>
+#import <SAMCache/SAMCache.h>
 
 @interface ProfileViewController ()
 {
@@ -17,11 +24,18 @@
     CGFloat screenHeight;
     NSString *mode;
     BOOL typingNotFocused;
+    BOOL typingNotFocusedAccount;
+    BOOL moveOnce;
+    BOOL didEditProfile;
+    BOOL imageChanged;
     CGFloat centerX;
     CGFloat centerY;
     NSInteger editingSection;
     NSString *dummyString;
 }
+@property (nonatomic) UIDynamicAnimator *animator;
+@property (nonatomic) UIActivityIndicatorView *indicator;
+@property (nonatomic) ImagePresentingViewController *imgPresentingController;
 
 @end
 
@@ -37,6 +51,10 @@
         toggle = 0;
         mode = @"viewer";
         typingNotFocused = YES;
+        typingNotFocusedAccount = YES;
+        moveOnce = NO;
+        didEditProfile = NO;
+        imageChanged = NO;
         centerX = [UIScreen mainScreen].bounds.size.width/2;
         centerY = [UIScreen mainScreen].bounds.size.height/2;
         dummyString = @"this is a dummy string with 255 characters. this is a dummy string with 255 characters. this is a dummy string with 255 characters. this is a dummy string with 255 characters. this is a dummy string with 255 characters. this is a dummy string w";
@@ -44,6 +62,10 @@
         _editorsInfo = [[Profile alloc] init];
         _tempProfileYouthView = [[Profile alloc] init];
         _sectionHeaders = [[NSArray alloc] initWithObjects:@"Excited about", @"Objective of the week", @"Verse/Quote", nil];
+        self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        self.imgPresentingController = [[ImagePresentingViewController alloc] init];
+        
+        [self profileImageViewAllocation];
         [self navBarButtonItemsAllocation];
         [self MenuViewControllerAllocation];
     }
@@ -60,11 +82,57 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
+    [self buttonAllocation];
     [self youthProfileInfoAllocation];
     [self nameAllocation];
-    [self triangleProfileAllocation];
+    [self tableViewAccountAllocation];
+    [self inputInfoAllocation];
     
+    UISwipeGestureRecognizer *swipeBackHome = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(backSwipe:)];
+    [swipeBackHome setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self.view addGestureRecognizer:swipeBackHome];
+    
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    
+    SAMGradientView *gradientView = [[SAMGradientView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, screenWidth, screenHeight)];
+    gradientView.gradientColors = @[UIColorFromRGB(0xF7941E), UIColorFromRGB(0xF7c41E)];
+    [self.view addSubview:gradientView];
+    [self.view sendSubviewToBack:gradientView];
     self.view.backgroundColor = UIColorFromRGB(0x222222);
+}
+
+- (void)profileImageViewAllocation
+{
+    self.profileImgView = [[UIImageView alloc] initWithFrame:CGRectMake((screenWidth/2.0f) - 50.0f, 64.0f, 100.0f, 100.0f)];
+    self.profileImgView.backgroundColor = [UIColor whiteColor];
+    [self profileImage:[UIImage imageNamed:@"DefaultImage"]];
+    [self.profileImgView setUserInteractionEnabled:YES];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didSelectImageChange)];
+    [self.profileImgView addGestureRecognizer:tap];
+    
+    [self.view addSubview:self.profileImgView];
+}
+
+- (void)didSelectImageChange
+{
+    if (self.navigationItem.rightBarButtonItem.image == [UIImage imageNamed:@"DoneCheck"]) {
+        self.profileImgView.alpha = 0.90f;
+        
+        [self.view addSubview:self.imgPresentingController.view];
+        
+        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+        imagePicker.delegate = self;
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePicker.mediaTypes = @[(NSString *) kUTTypeImage, (NSString *) kUTTypeMovie];
+        imagePicker.allowsEditing = YES;
+        
+        [self.imgPresentingController presentViewController:imagePicker animated:YES completion:^{
+            self.navigationController.navigationBarHidden = YES;
+        }];
+        
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    }
 }
 
 -(void)navBarButtonItemsAllocation
@@ -81,36 +149,84 @@
 
 -(void)youthProfileInfoAllocation
 {
-    // viewForTable is needed for collaboration with TriangleProfile
-    UIView *viewForTable = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 202.0f, screenWidth, screenHeight - 202.0f)];
-    viewForTable.backgroundColor = [UIColor whiteColor];
-    _youthProfileInfo = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 64.0f, screenWidth, viewForTable.frame.size.height - 64.0f)];
+    _youthProfileInfo = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 174.0f, screenWidth, screenHeight - 174.0f)];
     _youthProfileInfo.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    _youthProfileInfo.backgroundColor = [UIColor whiteColor];
+    _youthProfileInfo.backgroundColor = [UIColor clearColor];
     [_youthProfileInfo setSeparatorInset:UIEdgeInsetsZero];
-    _youthProfileInfo.contentInset = UIEdgeInsetsMake(-64.0f, 0.0f, 0.0f, 0.0f);
+    self.youthProfileInfo.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _youthProfileInfo.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
     [_youthProfileInfo setDelegate:self];
     [_youthProfileInfo setDataSource:self];
-    [viewForTable addSubview:_youthProfileInfo];
-    [self.view addSubview:viewForTable];
+    
+    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(infoTo)];
+    swipe.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.youthProfileInfo addGestureRecognizer:swipe];
+    
+    [self.view addSubview:self.youthProfileInfo];
 }
 
 -(void)nameAllocation
 {
-    _name = [[UITextField alloc] initWithFrame:CGRectMake(0.0f, 108.0f, screenWidth, 44.0f)];
-    _name.font = [UIFont fontWithName:@"Verdana" size:20.0f];
-    [_name setTextAlignment:NSTextAlignmentCenter];
-    [_name setTextColor:[UIColor whiteColor]];
-    _name.backgroundColor = UIColorFromRGB(0x222222);
-    _name.enabled = NO;
-    [_name setDelegate:self];
-    [self.view addSubview:_name];
+    self.firstName = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 20.0f, screenWidth, 44.0f)];
+    self.firstName.font = [UIFont fontWithName:@"Verdana" size:20.0f];
+    [self.firstName setTextAlignment:NSTextAlignmentCenter];
+    [self.firstName setTextColor:[UIColor whiteColor]];
+    self.firstName.backgroundColor = [UIColor clearColor];
+    self.firstName.enabled = YES;
+    
+    [self.view addSubview:self.firstName];
 }
 
--(void)triangleProfileAllocation
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    TriangleProfile *triangle = [[TriangleProfile alloc] initWithFrame:CGRectMake((screenWidth/2.0f) - 50.0f, 152.0f, 100.0f, 100.0f)];
-    [self.view addSubview:triangle];
+    if (self.profileImgView.image == [UIImage imageNamed:@"ImageChangeSelected"])
+        self.profileImgView.image = [UIImage imageNamed:@"DefaultImage"];
+    imageChanged = NO;
+ 
+    [self fixLayout:picker];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [self profileImage:[info objectForKey:UIImagePickerControllerEditedImage]];
+    imageChanged = YES;
+    
+    [self fixLayout:picker];
+}
+
+- (void)profileImage:(UIImage *)image
+{
+    CALayer *mask = [CALayer layer];
+    mask.contents = (id)[[UIImage imageNamed:@"TriangleMask.png"] CGImage];
+    mask.frame = CGRectMake(0.0f, 0.0f, 100.0f, 100.0f);
+    self.profileImgView.layer.mask = mask;
+    self.profileImgView.layer.masksToBounds = YES;
+    
+    self.profileImgView.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.profileImgView.layer.shadowOffset = CGSizeMake(3.0f, 1.0f);
+    self.profileImgView.layer.shadowOpacity = 1.0f;
+    self.profileImgView.layer.shadowRadius = 1.0f;
+    self.profileImgView.clipsToBounds = NO;
+    
+    UIImage *scaleImg = [ImageScale imageWithImage:image scaledToSize:CGSizeMake(150.0f, 150.0f)];
+    [self.profileImgView setImage:scaleImg];
+}
+
+-(void)fixLayout:(UIImagePickerController *)picker
+{
+    self.navigationController.navigationBarHidden = NO;
+    
+    self.profileImgView.alpha = 1.0f;
+    
+//    if (!moveOnce) {
+//        _youthProfileInfo.contentInset = UIEdgeInsetsMake(20.0f, 0.0f, 0.0f, 0.0f);
+//        moveOnce = YES;
+//    }
+    
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self.navigationController.navigationBar setFrame:CGRectMake(0.0f, 20.0f, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height)];
+        [self.imgPresentingController.view removeFromSuperview];
+    }];
 }
 
 -(void)MenuViewControllerAllocation
@@ -120,25 +236,165 @@
     [self.view addSubview:_MenuViewC.view];
 }
 
+- (void)buttonAllocation
+{
+    CGFloat position = self.profileImgView.bounds.size.height + 64.0f;
+    
+    self.page = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, position, [UIScreen mainScreen].bounds.size.width/2, 38.0f)];
+    self.page.backgroundColor = [UIColor clearColor];
+    [self.page setTitle:@"page" forState:UIControlStateNormal];
+    [self.page setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.page setTitleColor:[UIColor clearColor] forState:UIControlStateHighlighted];
+    [self.page addTarget:self action:@selector(pageTo) forControlEvents:UIControlEventTouchUpInside];
+    self.page.alpha = 0.0f;
+    self.page.enabled = NO;
+    
+    self.info = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2, position, [UIScreen mainScreen].bounds.size.width/2, 38.0f)];
+    self.info.backgroundColor = [UIColor clearColor];
+    [self.info setTitle:@"info" forState:UIControlStateNormal];
+    [self.info setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.info setTitleColor:[UIColor clearColor] forState:UIControlStateHighlighted];
+    [self.info addTarget:self action:@selector(infoTo) forControlEvents:UIControlEventTouchUpInside];
+    self.info.alpha = 0.0f;
+    self.info.enabled = NO;
+    
+    [self.view addSubview:self.page];
+    [self.view addSubview:self.info];
+}
+
+-(void)tableViewAccountAllocation
+{
+    self.tableViewAccount = [[UITableView alloc] initWithFrame:CGRectMake(screenWidth + 20.0f, self.youthProfileInfo.frame.origin.y + 38.0f, screenWidth - 40.0f, 80.0f) style:UITableViewStylePlain];
+    [self.tableViewAccount setDelegate:self];
+    [self.tableViewAccount setDataSource:self];
+    self.tableViewAccount.scrollEnabled = NO;
+    self.tableViewAccount.layer.cornerRadius = 3;
+    self.tableViewAccount.clipsToBounds = YES;
+    [self.tableViewAccount setSeparatorInset:UIEdgeInsetsZero];
+    
+    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(pageTo)];
+    swipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.tableViewAccount addGestureRecognizer:swipe];
+    
+    [self.view addSubview:self.tableViewAccount];
+}
+
+-(void)inputInfoAllocation
+{
+    self.firstNameAccount = [[UITextField alloc] initWithFrame:CGRectMake(5, 2, 275, 40)];
+    self.firstNameAccount.font = [UIFont fontWithName:@"Verdana" size:22.0f];
+    self.firstNameAccount.clearButtonMode = UITextFieldViewModeAlways;
+    [self.firstNameAccount setDelegate:self];
+    self.lastNameAccount = [[UITextField alloc] initWithFrame:CGRectMake(5, 2, 275, 40)];
+    self.lastNameAccount.font = [UIFont fontWithName:@"Verdana" size:22.0f];
+    self.lastNameAccount.clearButtonMode = UITextFieldViewModeAlways;
+    [self.lastNameAccount setDelegate:self];
+//    self.password = [[UITextField alloc] initWithFrame:CGRectMake(5, 2, 275, 40)];
+//    self.password.font = [UIFont fontWithName:@"Verdana" size:22.0f];
+//    self.password.clearButtonMode = UITextFieldViewModeAlways;
+//    self.password.secureTextEntry = YES;
+//    [self.password setDelegate:self];
+//    self.retypePassword = [[UITextField alloc] initWithFrame:CGRectMake(5, 2, 275, 40)];
+//    self.retypePassword.font = [UIFont fontWithName:@"Verdana" size:22.0f];
+//    self.retypePassword.clearButtonMode = UITextFieldViewModeAlways;
+//    self.retypePassword.secureTextEntry = YES;
+//    [self.retypePassword setDelegate:self];
+}
+
+- (void)pageTo
+{
+    CGPoint positionPage = CGPointMake(screenWidth/2, self.youthProfileInfo.center.y);
+    CGPoint positionInfo = CGPointMake(screenWidth + screenWidth/2, self.tableViewAccount.center.y);
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        self.youthProfileInfo.center = positionPage;
+        self.tableViewAccount.center = positionInfo;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (void)pageReturn
+{
+    CGPoint positionPage = CGPointMake(screenWidth/2, self.youthProfileInfo.center.y - 38.0f);
+    CGPoint positionInfo = CGPointMake(screenWidth + screenWidth/2, self.tableViewAccount.center.y);
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        self.youthProfileInfo.center = positionPage;
+        self.tableViewAccount.center = positionInfo;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (void)infoTo
+{
+    if (self.navigationItem.rightBarButtonItem.image == [UIImage imageNamed:@"DoneCheck"]) {
+        CGPoint positionPage = CGPointMake(-(screenWidth + screenWidth/2), self.youthProfileInfo.center.y);
+        CGPoint positionInfo = CGPointMake(screenWidth/2, self.tableViewAccount.center.y);
+        
+        [UIView animateWithDuration:0.5f animations:^{
+            self.youthProfileInfo.center = positionPage;
+            self.tableViewAccount.center = positionInfo;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+}
+
 #pragma mark - Data Collection and Organization
+-(void)dishOutProfileDataCache:(NSMutableDictionary *)data
+{
+    self.youthData = data;
+    
+    for (NSInteger i = 0; i < [self.youthData count]; i++) {
+        NSString *keyforobject = [NSString stringWithFormat:@"%ld", (long)i];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithDictionary:[self.youthData objectForKey:keyforobject]];
+        
+        NSString *tableToken = [dict objectForKey:@"device_token"];
+        NSString *userDefaultsToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"];
+        
+        NSString *imageName = [NSString stringWithFormat:@"%@%@%@", [dict objectForKey:@"firstname"], [dict objectForKey:@"lastname"], @".png"];
+        NSData *imageData = [[SAMCache sharedCache] objectForKey:imageName];
+        if ([tableToken isEqualToString:userDefaultsToken]) {
+            [self.editorsInfo setObjectFromDictionary:dict];
+            if (!didEditProfile) {
+                if (imageData) {
+                    self.profileImgView.image = [UIImage imageWithData:imageData];
+                }
+            } else
+                didEditProfile = NO;
+        }
+    }
+    
+    self.firstName.text = [self.editorsInfo firstName];
+    [self.firstNameAccount setText:[self.editorsInfo firstName]];
+    [self.lastNameAccount setText:[self.editorsInfo lastName]];
+}
 
 -(void)dishOutProfileData:(NSMutableDictionary *)data
 {
-    _youthData = data;
+    self.youthData = data;
     
-    for (NSInteger i = 0; i < [_youthData count]; i++) {
+    for (NSInteger i = 0; i < [self.youthData count]; i++) {
         NSString *keyforobject = [NSString stringWithFormat:@"%ld", (long)i];
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithDictionary:[_youthData objectForKey:keyforobject]];
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithDictionary:[self.youthData objectForKey:keyforobject]];
         
         NSString *tableToken = [dict objectForKey:@"device_token"];
         NSString *userDefaultsToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"];
         if ([tableToken isEqualToString:userDefaultsToken]) {
-            [_editorsInfo setObjectFromDictionary:dict];
-            break;
+            [self.editorsInfo setObjectFromDictionary:dict];
+            NSString *imageName = [NSString stringWithFormat:@"%@%@%@", [self.editorsInfo firstName], [self.editorsInfo lastName], @".png"];
+            if ([self.editorsInfo imagepath])
+                [TalkController downloadImage:self imagepath:self.editorsInfo.imagepath name:imageName completion:^(NSData *data) {
+                    self.profileImgView.image = [UIImage imageWithData:data];
+                }];
         }
     }
-    _name.text = [NSString stringWithFormat:@"%@%@%@", [_editorsInfo firstName], @" ", [_editorsInfo lastName]];
-    [_youthProfileInfo reloadData];
+    
+    self.firstName.text = [self.editorsInfo firstName];
+    [self.firstNameAccount setText:[self.editorsInfo firstName]];
+    [self.lastNameAccount setText:[self.editorsInfo lastName]];
 }
 
 #pragma mark - Permission Settings
@@ -148,9 +404,19 @@
     mode = @"viewer";
     [self.navigationItem setLeftBarButtonItem:_backButton];
     [_tempProfileYouthView setObjectFromDictionary:selectedProfile];
-    _name.text = [NSString stringWithFormat:@"%@%@%@", [_tempProfileYouthView firstName], @" ", [_tempProfileYouthView lastName]];
+    self.firstName.text = [_tempProfileYouthView firstName];
     
-    [_youthProfileInfo reloadData];
+    NSString *imageName = [NSString stringWithFormat:@"%@%@%@", [self.tempProfileYouthView firstName], [self.tempProfileYouthView lastName], @".png"];
+    NSData *imageData = [[SAMCache sharedCache] objectForKey:imageName];
+    if (imageData) {
+        self.profileImgView.image = [UIImage imageWithData:imageData];
+    }
+    
+    if (![[self.tempProfileYouthView imagepath] isEqualToString:@""]) {
+        [TalkController downloadImage:self imagepath:[self.tempProfileYouthView imagepath] name:imageName completion:^(NSData *data) {
+            self.profileImgView.image = [UIImage imageWithData:data];
+        }];
+    }
 }
 
 -(void)editorSettings
@@ -164,58 +430,97 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"CellId";
-    
-    ProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (!cell) {
-        cell = [[ProfileCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        [cell.textView setDelegate:self];
-    }
-    
-    if ([mode isEqualToString:@"editor"]) {
-        if (indexPath.section == 0) {
-            cell.textView.text = [_editorsInfo excitedAbout];
-        } else if (indexPath.section == 1) {
-            cell.textView.text = [_editorsInfo objective];
-        } else {
-            cell.textView.text = [_editorsInfo versequote];
+    if (tableView == self.youthProfileInfo) {
+        static NSString *CellIdentifier = @"CellId";
+        
+        ProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (!cell) {
+            cell = [[ProfileCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            [cell.textView setDelegate:self];
         }
+        
+        if ([mode isEqualToString:@"editor"]) {
+            if (indexPath.section == 0) {
+                cell.textView.text = [_editorsInfo excitedAbout];
+            } else if (indexPath.section == 1) {
+                cell.textView.text = [_editorsInfo objective];
+            } else {
+                cell.textView.text = [_editorsInfo versequote];
+            }
+        } else {
+            if (indexPath.section == 0) {
+                cell.textView.text = [_tempProfileYouthView excitedAbout];
+            } else if (indexPath.section == 1) {
+                cell.textView.text = [_tempProfileYouthView objective];
+            } else {
+                cell.textView.text = [_tempProfileYouthView versequote];
+            }
+        }
+        
+        CGSize size = [cell.textView sizeThatFits:CGSizeMake(screenWidth - 10.0f, FLT_MAX)];
+        if (size.width < screenWidth - 10.0f)
+            size.width = screenWidth - 10.0f;
+        cell.textView.frame = CGRectMake(10.0f, 7.5f, size.width, size.height);
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.backgroundColor = [UIColor clearColor];
+        [cell addSubview:cell.textView];
+        
+        return cell;
+        
     } else {
-        if (indexPath.section == 0) {
-            cell.textView.text = [_tempProfileYouthView excitedAbout];
-        } else if (indexPath.section == 1) {
-            cell.textView.text = [_tempProfileYouthView objective];
-        } else {
-            cell.textView.text = [_tempProfileYouthView versequote];
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CellIdentifier"];
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        switch (indexPath.row) {
+            case 0:
+                self.firstNameAccount.placeholder = @"first";
+                [cell addSubview:self.firstNameAccount];
+                break;
+            case 1:
+                self.lastNameAccount.placeholder = @"last";
+                [cell addSubview:self.lastNameAccount];
+                break;
+//            case 2:
+//                self.password.placeholder = @"password";
+//                [cell addSubview:self.password];
+//                break;
+//            case 3:
+//                self.retypePassword.placeholder = @"re-type password";
+//                [cell addSubview:self.retypePassword];
+//                break;
+            default:
+                break;
         }
+        
+        return cell;
     }
-
-    CGSize size = [cell.textView sizeThatFits:CGSizeMake(screenWidth - 10.0f, FLT_MAX)];
-    if (size.width < screenWidth - 10.0f)
-        size.width = screenWidth - 10.0f;
-    cell.textView.frame = CGRectMake(10.0f, 7.5f, size.width, size.height);
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cell addSubview:cell.textView];
-    
-    return cell;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    if (tableView == self.youthProfileInfo)
+        return 1;
+    
+    return 4;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    if (tableView == self.youthProfileInfo)
+        return 3;
+    
+    return 1;
 }
 
 #pragma mark - UITableViewDelegates
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self textViewHeightForRowAtIndexPath:indexPath];
+    if (tableView == self.youthProfileInfo)
+        return [self textViewHeightForRowAtIndexPath:indexPath];
+    
+    return 40.0f;
 }
 
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -264,14 +569,28 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, tableView.frame.size.width, 25.0f)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 0.0f, tableView.frame.size.width - 10.0f, view.frame.size.height)];
-    [label setFont:[UIFont fontWithName:@"Verdana" size:13.0f]];
-    [label setText:[_sectionHeaders objectAtIndex:section]];
-    [view addSubview:label];
-    view.backgroundColor = [UIColorFromRGB(0xF7941E) colorWithAlphaComponent:0.60f];
+    if (tableView == self.youthProfileInfo) {
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, tableView.frame.size.width, 25.0f)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 0.0f, tableView.frame.size.width - 10.0f, view.frame.size.height)];
+        label.textColor = [UIColor whiteColor];
+        [label setFont:[UIFont fontWithName:@"Verdana" size:13.0f]];
+        [label setText:[_sectionHeaders objectAtIndex:section]];
+        [view addSubview:label];
+        view.backgroundColor = [UIColor clearColor];
+        
+        
+        return view;
+    } else {
+        return nil;
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (tableView == self.youthProfileInfo)
+        return 25.0f;
     
-    return view;
+    return 0.0f;
 }
 
 #pragma mark - UITextViewDelegates
@@ -298,44 +617,57 @@
             textView.frame = CGRectMake(10.0f, 7.5f, textView.frame.size.width, height);
         }
     }
-    
     CGRect sectionRect = [_youthProfileInfo rectForSection:editingSection];
     [_youthProfileInfo scrollRectToVisible:sectionRect animated:NO];
     [_youthProfileInfo beginUpdates];
     [_youthProfileInfo endUpdates];
+    
+    if (![textView isFirstResponder]) {
+        [textView becomeFirstResponder];
+    }
 }
 
 #pragma mark - UITextFieldDelegates
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    [self lowerAccount];
     return [textField resignFirstResponder];
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self raiseAccount];
 }
 
 #pragma mark - User Interaction
 
 -(void)donePressed:(id)sender
 {
-    NSString *firstTemp = @"";
-    NSString *lastTemp = @"";
     NSString *excitedAbout = @"";
     NSString *objective = @"";
     NSString *versequote = @"";
+    didEditProfile = YES;
     
     [self dismissKeyboard];
     [self.navigationItem setRightBarButtonItem:_editButton];
-    _name.enabled = NO;
+    [self.view bringSubviewToFront:self.MenuViewC.view];
+    
+    if (typingNotFocused)
+        [self lowerAccount];
+    
+    [self pageReturn];
+    [UIView animateWithDuration:0.5 animations:^{
+        self.info.alpha = 0.0f;
+        self.info.enabled = NO;
+        self.page.alpha = 0.0f;
+        self.info.enabled = NO;
+    } completion:^(BOOL finished) {
+        
+    }];
     
     for (ProfileCell *cell in [_youthProfileInfo visibleCells]) {
         cell.textView.editable = NO;
-    }
-    
-    if ([[_name.text componentsSeparatedByString:@" "] count] > 1) {
-        firstTemp = [[_name.text componentsSeparatedByString:@" "] objectAtIndex:0];
-        lastTemp = [_name.text substringFromIndex:[firstTemp length]+1];
-    } else {
-        firstTemp = _name.text;
-        lastTemp = @"";
     }
     
     for (ProfileCell *cell in [_youthProfileInfo visibleCells]) {
@@ -348,14 +680,51 @@
         }
     }
     
+    NSString *churchID = [[NSString alloc] initWithString:[[[NSUserDefaults standardUserDefaults] objectForKey:@"signkey"] substringToIndex:2]];
+    NSString *urlYouth = @"http://198.58.106.245/youth/";
+    NSString *urlString = [NSString stringWithFormat:@"%@%@%@", urlYouth, churchID, @"uploadImage.php"];
+    NSData *imageData = UIImageJPEGRepresentation(self.profileImgView.image, 0.6);
+    NSString *name = [NSString stringWithFormat:@"%@%@", self.firstNameAccount.text, self.lastNameAccount.text];
+    NSString *imageFileName = [NSString stringWithFormat:@"%@%@", name, @".png"];
+    NSString *imagePath = [NSString stringWithFormat:@"%@%@%@%@", urlYouth, churchID, @"images/", imageFileName];
+    
+    NSDictionary *items = [[NSDictionary alloc] initWithObjectsAndKeys:urlString, @"urlString", imageData, @"imageData",
+                           imageFileName, @"imageFileName", nil];
+    
+    if (imageChanged) {
+        self.indicator.center = CGPointMake(self.profileImgView.center.x, self.profileImgView.center.y - 15);
+        [self.view addSubview:self.indicator];
+        [self.indicator startAnimating];
+        [TalkController uploadImage:self items:items completion:^(BOOL success) {
+            if (success) {
+                [self.indicator stopAnimating];
+            } else {
+                [self.indicator stopAnimating];
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unable to upload picture at this time. Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                alert.frame = CGRectMake(50.0f, 50.0f, [UIScreen mainScreen].bounds.size.width - 100.0f, 150.0f);
+                [alert show];
+            }
+        }];
+        imageChanged = NO;
+    }
+    
     // Navigation Controller is responsible for this delegate
-    [self.tableDelegate didEditForTable:[NSArray arrayWithObjects:@"update", firstTemp, lastTemp, excitedAbout, objective, versequote,
-                                         [[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"], nil]];
+    [self.tableDelegate didEditForTable:[NSArray arrayWithObjects:@"update", self.firstNameAccount.text, self.lastNameAccount.text, excitedAbout, objective, versequote,
+                                         [[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"], imagePath, nil]];
 }
 
 -(void)editPressed:(id)sender
 {
-    _name.enabled = YES;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.info.alpha = 1.0f;
+        self.info.enabled = YES;
+        self.page.alpha = 1.0f;
+        self.page.enabled = YES;
+        self.youthProfileInfo.center = CGPointMake(self.youthProfileInfo.center.x, self.youthProfileInfo.center.y + 38.0f);
+    } completion:^(BOOL finished) {
+        
+    }];
     [self.navigationItem setRightBarButtonItem:_doneButton];
     for (ProfileCell *cell in [_youthProfileInfo visibleCells]) {
         cell.textView.editable = YES;
@@ -374,15 +743,24 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(void)backSwipe:(id)sender
+{
+    if ([mode isEqualToString:@"viewer"]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 #pragma mark - Reposition Table For Editing
 
 -(void)raiseTable
 {
+    [[[UIApplication sharedApplication] keyWindow] becomeFirstResponder];
     if (typingNotFocused) {
-        [self.view bringSubviewToFront:[_youthProfileInfo superview]];
-        _youthProfileInfo.center = CGPointMake(centerX, _youthProfileInfo.center.y - 64.0f);
+        [self.view bringSubviewToFront:self.youthProfileInfo];
+        //_youthProfileInfo.center = CGPointMake(centerX, _youthProfileInfo.center.y - 110.0f);
         [UIView animateWithDuration:0.15f animations:^{
-            [_youthProfileInfo superview].center = CGPointMake(centerX, [_youthProfileInfo superview].center.y - 138.0f);
+            self.youthProfileInfo.center = CGPointMake(centerX, _youthProfileInfo.center.y - 148.0f);
+            self.youthProfileInfo.backgroundColor = [UIColorFromRGB(0x222222) colorWithAlphaComponent:0.5f];
         }];
         typingNotFocused = NO;
     }
@@ -391,16 +769,41 @@
 -(void)lowerTable
 {
     if (!typingNotFocused) {
-        _youthProfileInfo.center = CGPointMake(centerX, (_youthProfileInfo.frame.size.height/2) + 64.0f);
+        //_youthProfileInfo.center = CGPointMake(centerX, (_youthProfileInfo.frame.size.height/2) + 110.0f);
         [UIView animateWithDuration:0.15f animations:^{
-            [_youthProfileInfo superview].center = CGPointMake(centerX, [_youthProfileInfo superview].center.y + 138.0f);
+            _youthProfileInfo.center = CGPointMake(centerX, _youthProfileInfo.center.y + 148.0f);
+            self.youthProfileInfo.backgroundColor = [UIColor clearColor];
         } completion:^(BOOL finished) {
-            [self.view sendSubviewToBack:[_youthProfileInfo superview]];
+            //[self.view sendSubviewToBack:self.youthProfileInfo];
         }];
         typingNotFocused = YES;
     }
     editingSection = 999;
     [_youthProfileInfo reloadData];
+}
+
+- (void)raiseAccount
+{
+    if (typingNotFocusedAccount) {
+        [self.view bringSubviewToFront:self.tableViewAccount];
+        [UIView animateWithDuration:0.15f animations:^{
+            CGFloat keyHeight = 216.0f;
+            CGFloat position = self.view.bounds.size.height - keyHeight - 20.0f - (self.tableViewAccount.frame.size.height / 2.0f);
+            self.tableViewAccount.center = CGPointMake(self.tableViewAccount.center.x, position);
+        }];
+        typingNotFocusedAccount = NO;
+    }
+}
+
+- (void)lowerAccount
+{
+    if (!typingNotFocusedAccount) {
+        [UIView animateWithDuration:0.15f animations:^{
+            CGFloat position = 64.0f + self.profileImgView.frame.size.height + self.info.frame.size.height + 10.0f + (self.tableViewAccount.frame.size.height/2.0f);
+            self.tableViewAccount.center = CGPointMake(self.tableViewAccount.center.x, position);
+        }];
+        typingNotFocusedAccount = YES;
+    }
 }
 
 #pragma mark - Keyboard Control
@@ -426,11 +829,16 @@
 
 -(void)dismissKeyboard
 {
-    [self lowerTable];
+    if (!typingNotFocused)
+        [self lowerTable];
+    
     for (ProfileCell *cell in [_youthProfileInfo visibleCells]) {
         [cell.textView resignFirstResponder];
     }
-    [_name resignFirstResponder];
+    [self.firstNameAccount resignFirstResponder];
+    [self.lastNameAccount resignFirstResponder];
+//    [self.password resignFirstResponder];
+//    [self.retypePassword resignFirstResponder];
 }
 
 #pragma mark - Memory Management

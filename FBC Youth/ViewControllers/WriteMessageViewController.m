@@ -39,6 +39,26 @@
     self.view.layer.cornerRadius = 10;
     self.view.clipsToBounds = YES;
     self.view.backgroundColor = UIColorFromRGB(0x222222);
+    
+    if ([self.messageView.text isEqualToString:@""]) {
+        self.newsButton.enabled = NO;
+        self.thoughtButton.enabled = NO;
+        self.iloveyouButton.enabled = NO;
+        self.busRideButton.enabled = NO;
+        self.newsButton.titleLabel.textColor = [UIColor grayColor];
+        self.thoughtButton.titleLabel.textColor = [UIColor grayColor];
+        self.iloveyouButton.titleLabel.textColor = [UIColor grayColor];
+        self.busRideButton.titleLabel.textColor = [UIColor grayColor];
+    } else {
+        self.newsButton.enabled = YES;
+        self.thoughtButton.enabled = YES;
+        self.iloveyouButton.enabled = YES;
+        self.busRideButton.enabled = YES;
+        self.newsButton.titleLabel.textColor = UIColorFromRGB(0xF7941E);
+        self.thoughtButton.titleLabel.textColor = UIColorFromRGB(0xF7941E);
+        self.iloveyouButton.titleLabel.textColor = UIColorFromRGB(0xF7941E);
+        self.busRideButton.titleLabel.textColor = UIColorFromRGB(0xF7941E);
+    }
 }
 
 -(void)controlInitialization
@@ -57,6 +77,7 @@
     _messageView.opaque = NO;
     _messageView.backgroundColor = [UIColor clearColor];
     _messageView.textColor = [UIColor whiteColor];
+    _messageView.delegate = self;
     [self.view addSubview:_messageView];
 }
 
@@ -71,8 +92,9 @@
     _newsButton.titleLabel.font = [UIFont fontWithName:@"Verdana" size:16.0f];
     _newsButton.backgroundColor = UIColorFromRGB(0x222222);
     _newsButton.clipsToBounds = YES;
-    [_newsButton setTitleColor:UIColorFromRGB(0xF7941E) forState:UIControlStateNormal];
+    [_newsButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [_newsButton addTarget:self action:@selector(newsPressed:) forControlEvents:UIControlEventTouchDown];
+    _newsButton.enabled = NO;
     [self.view addSubview:_newsButton];
 }
 
@@ -87,8 +109,9 @@
     _thoughtButton.titleLabel.font = [UIFont fontWithName:@"Verdana" size:16.0f];
     _thoughtButton.backgroundColor = UIColorFromRGB(0x222222);
     _thoughtButton.clipsToBounds = YES;
-    [_thoughtButton setTitleColor:UIColorFromRGB(0xF7941E) forState:UIControlStateNormal];
+    [_thoughtButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [_thoughtButton addTarget:self action:@selector(thoughtPressed:) forControlEvents:UIControlEventTouchDown];
+    _thoughtButton.enabled = NO;
     [self.view addSubview:_thoughtButton];
 }
 
@@ -103,8 +126,9 @@
     _iloveyouButton.titleLabel.font = [UIFont fontWithName:@"Verdana" size:16.0f];
     _iloveyouButton.backgroundColor = UIColorFromRGB(0x222222);
     _iloveyouButton.clipsToBounds = YES;
-    [_iloveyouButton setTitleColor:UIColorFromRGB(0xF7941E) forState:UIControlStateNormal];
+    [_iloveyouButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [_iloveyouButton addTarget:self action:@selector(iloveyouPressed:) forControlEvents:UIControlEventTouchDown];
+    _iloveyouButton.enabled = NO;
     [self.view addSubview:_iloveyouButton];
 }
 
@@ -119,8 +143,9 @@
     _busRideButton.titleLabel.font = [UIFont fontWithName:@"Verdana" size:16.0f];
     _busRideButton.backgroundColor = UIColorFromRGB(0x222222);
     _busRideButton.clipsToBounds = YES;
-    [_busRideButton setTitleColor:UIColorFromRGB(0xF7941E) forState:UIControlStateNormal];
+    [_busRideButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [_busRideButton addTarget:self action:@selector(busRidePressed:) forControlEvents:UIControlEventTouchDown];
+    _busRideButton.enabled = NO;
     [self.view addSubview:_busRideButton];
 }
 
@@ -176,6 +201,31 @@
     
     [self.rideDelegate didFinishSendingRideQuestion:_messageView.text];
     _messageView.text = @"";
+}
+
+#pragma mark - Text View Delegate
+
+-(void)textViewDidChange:(UITextView *)textView
+{
+    if ([_messageView.text isEqualToString:@""]) {
+        _newsButton.enabled = NO;
+        _thoughtButton.enabled = NO;
+        _iloveyouButton.enabled = NO;
+        _busRideButton.enabled = NO;
+        _newsButton.titleLabel.textColor = [UIColor grayColor];
+        _thoughtButton.titleLabel.textColor = [UIColor grayColor];
+        _iloveyouButton.titleLabel.textColor = [UIColor grayColor];
+        _busRideButton.titleLabel.textColor = [UIColor grayColor];
+    } else {
+        _newsButton.enabled = YES;
+        _thoughtButton.enabled = YES;
+        _iloveyouButton.enabled = YES;
+        _busRideButton.enabled = YES;
+        _newsButton.titleLabel.textColor = UIColorFromRGB(0xF7941E);
+        _thoughtButton.titleLabel.textColor = UIColorFromRGB(0xF7941E);
+        _iloveyouButton.titleLabel.textColor = UIColorFromRGB(0xF7941E);
+        _busRideButton.titleLabel.textColor = UIColorFromRGB(0xF7941E);
+    }
 }
 
 #pragma mark - Memory Management

@@ -15,14 +15,16 @@
 
 @interface Profile : NSObject
 
-@property NSString *firstName;
-@property NSString *lastName;
-@property NSString *deviceToken;
-@property NSString *signKey;
-@property NSString *excitedAbout;
-@property NSString *objective;
-@property NSString *versequote;
-@property NSString *location;
+@property (nonatomic) NSString *firstName;
+@property (nonatomic) NSString *lastName;
+@property (nonatomic) NSString *deviceToken;
+@property (nonatomic) NSString *signKey;
+@property (nonatomic) NSString *excitedAbout;
+@property (nonatomic) NSString *objective;
+@property (nonatomic) NSString *versequote;
+@property (nonatomic) NSString *location;
+@property (nonatomic) NSString *imagepath;
+//@property (nonatomic) UIImage *profileImage;
 
 - (void)setObjectFromDictionary:(NSMutableDictionary *)dict;
 

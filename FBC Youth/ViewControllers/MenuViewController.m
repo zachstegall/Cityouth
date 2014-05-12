@@ -36,7 +36,7 @@
     [self menuAllocation];
     
     self.view.userInteractionEnabled = YES;
-    self.view.backgroundColor = UIColorFromRGB(0xF7941E);
+    self.view.backgroundColor = [UIColorFromRGB(0x222222) colorWithAlphaComponent:0.8f];
 }
 
 -(void)dotViewAllocation
@@ -48,7 +48,7 @@
 -(void)menuAllocation
 {
     _menu = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 57.0f, [UIScreen mainScreen].bounds.size.width, 145.0f)];
-    _menu.backgroundColor = UIColorFromRGB(0xF7941E);
+    self.menu.backgroundColor = [UIColor clearColor];
     _menu.scrollEnabled = NO;
     [_menu setSeparatorInset:UIEdgeInsetsZero];
     [_menu setDelegate:self];
@@ -69,7 +69,16 @@
     
     cell.name.text = [_menuItems objectAtIndex:indexPath.row];
     
+    if ([[_menuItems objectAtIndex:indexPath.row] isEqualToString:@"Home"]) {
+        cell.name.textColor = UIColorFromRGB(0xF7941E);
+    }
+    
+    if ([[_menuItems objectAtIndex:indexPath.row] isEqualToString:@"Profile"]) {
+        cell.name.textColor = UIColorFromRGB(0xF7A41E);
+    }
+    
     if ([[_menuItems objectAtIndex:indexPath.row] isEqualToString:@"Wall"]) {
+        cell.name.textColor = UIColorFromRGB(0xF7b41E);
         _dotView.frame = CGRectMake(75.0f, cell.center.y - 5.0f, 15.0f, 15.0f);
         [cell addSubview:_dotView];
     }
