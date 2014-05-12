@@ -9,6 +9,18 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		
+		<key>Pods-SAMCache.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>Pods-SAMGradientView.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
+		
 		<key>Pods.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -17,12 +29,26 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>CE9382B66D1844CD8CB52AF7</key>
+		
+		<key>12B0D99EF96944B3AEBF8FEE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DBC0D740894F47B48BE17637</key>
+		<key>8FD82547BEF24A758BACAAA6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B6A8A9D612FF4C9D85B8F633</key>
+		
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		
+		<key>D260697C003F4F45A24E8575</key>
+		
 		<dict>
 			<key>primary</key>
 			<true/>

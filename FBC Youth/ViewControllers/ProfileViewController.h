@@ -16,22 +16,30 @@
 #import "Profile.h"
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface ProfileViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UITextFieldDelegate>
+@interface ProfileViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 // Objects
-@property (nonatomic, strong) MenuViewController *MenuViewC;
-@property (nonatomic, strong) Profile *editorsInfo;
-@property (nonatomic, strong) Profile *tempProfileYouthView;
-@property (nonatomic, strong) NSMutableDictionary *youthData;
-@property (nonatomic, strong) NSArray *sectionHeaders;
+@property (nonatomic) MenuViewController *MenuViewC;
+@property (nonatomic) Profile *editorsInfo;
+@property (nonatomic) Profile *tempProfileYouthView;
+@property (nonatomic) NSMutableDictionary *youthData;
+@property (nonatomic) NSArray *sectionHeaders;
 
 // Controls
-@property (nonatomic, strong) UITextField *name;
-@property (nonatomic, strong) UITableView *youthProfileInfo;
-@property (strong, nonatomic) UIBarButtonItem *listButton;
-@property (strong, nonatomic) UIBarButtonItem *editButton;
-@property (strong, nonatomic) UIBarButtonItem *doneButton;
-@property (strong, nonatomic) UIBarButtonItem *backButton;
+@property (nonatomic) UILabel *firstName;
+@property (nonatomic) UITableView *youthProfileInfo;
+@property (nonatomic) UIImageView *profileImgView;
+@property (nonatomic) UIBarButtonItem *listButton;
+@property (nonatomic) UIBarButtonItem *editButton;
+@property (nonatomic) UIBarButtonItem *doneButton;
+@property (nonatomic) UIBarButtonItem *backButton;
+@property (nonatomic) UIButton *page;
+@property (nonatomic) UIButton *info;
+@property (nonatomic) UITableView *tableViewAccount;
+@property (nonatomic) UITextField *firstNameAccount;
+@property (nonatomic) UITextField *lastNameAccount;
+//@property (nonatomic) UITextField *password;
+//@property (nonatomic) UITextField *retypePassword;
 
 // Protocols
 @property (weak, nonatomic) id <ToggleDelegate> delegate;
@@ -40,6 +48,7 @@
 // Public Methods
 - (void)viewerSettings:(NSMutableDictionary *)selectedProfile;
 - (void)editorSettings;
--(void)dishOutProfileData:(NSMutableDictionary *)data;
+- (void)dishOutProfileData:(NSMutableDictionary *)data;
+- (void)dishOutProfileDataCache:(NSMutableDictionary *)data;
 
 @end

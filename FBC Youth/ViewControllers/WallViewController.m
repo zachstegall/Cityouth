@@ -9,6 +9,8 @@
 #import "WallViewController.h"
 #import "WallCell.h"
 
+#import <SAMGradientView/SAMGradientView.h>
+
 @interface WallViewController ()
 {
     NSString *youthKey;
@@ -58,6 +60,10 @@
     [self WriteMessageViewControllerAllocation];
     [self wallOfPostsAllocation];
     
+    SAMGradientView *gradientView = [[SAMGradientView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.bounds.size.width, self.view.bounds.size.height)];
+    gradientView.gradientColors = @[UIColorFromRGB(0xF7941E), UIColorFromRGB(0xF7c41E)];
+    [self.view addSubview:gradientView];
+    [self.view sendSubviewToBack:gradientView];
     self.view.backgroundColor = UIColorFromRGB(0x222222);
 }
 
@@ -76,9 +82,10 @@
 {
     _wallOfPosts = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 64.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64.0f) style:UITableViewStylePlain];
     [_wallOfPosts setSeparatorInset:UIEdgeInsetsZero];
+    self.wallOfPosts.backgroundColor = [UIColor clearColor];
     [_wallOfPosts setDataSource:self];
     [_wallOfPosts setDelegate:self];
-    _wallOfPosts.contentInset = UIEdgeInsetsMake(-64.0f, 0.0f, 0.0f, 0.0f);
+    _wallOfPosts.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
     [self.view addSubview:_wallOfPosts];
 }
 
@@ -138,6 +145,7 @@
     CGFloat yval = [self tableView:tableView heightForRowAtIndexPath:indexPath];
     cell.icon.frame = CGRectMake(20.0f, (yval/2.0f)-7.5f, 15.0f, 15.0f);
     
+    cell.backgroundColor = [UIColor clearColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
@@ -175,6 +183,21 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 1.0f;
+}
+
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"signkey"] isEqualToString:adminKey])
+        return YES;
+    return NO;
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        Wall *post = [_wallData objectAtIndex:indexPath.row];
+        [self.tableDelegate didEditForTable:[NSArray arrayWithObjects:@"delete", post.message, post.icon, @"delete", nil]];
+    }
 }
 
 #pragma mark - User Interaction

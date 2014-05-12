@@ -10,7 +10,7 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "HomeViewController.h"
 
-#define ServerApiURL @"http://198.58.106.245/youth/index.php"
+#define ServerApiURL @"http://198.58.106.245/youth/testindex.php"
 
 @implementation AppDelegate
 
@@ -39,9 +39,13 @@
     _navController.navigationBar.shadowImage = [UIImage new];
     _navController.navigationBar.translucent = YES;
     
-    // only load data if we have a UUID for the user
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"])
+    // only load data if we have a sign in data for the user
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"signkey"] != nil &&
+        [[NSUserDefaults standardUserDefaults] objectForKey:@"first"] != nil &&
+        [[NSUserDefaults standardUserDefaults] objectForKey:@"last"] != nil &&
+        [[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"] != nil) {
         [_navController loadData];
+    }
     
     [self.window setRootViewController:_navController];
     
@@ -75,7 +79,7 @@
                                  @"actualtoken": @"y",
                                  @"d_token": [[NSUserDefaults standardUserDefaults] objectForKey:@"UUID"]};
         [manager POST:ServerApiURL parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSLog(@"JSON: %@", responseObject);
+            //NSLog(@"JSON: %@", responseObject);
             [[NSUserDefaults standardUserDefaults] setObject:@"y" forKey:@"actualtoken"];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             //NSLog(@"Error: %@", error);

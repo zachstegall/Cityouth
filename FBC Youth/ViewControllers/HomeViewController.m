@@ -95,7 +95,7 @@
     _allYouthTable = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 64.0f, screenWidth, screenHeight - 64.0f)];
     _allYouthTable.backgroundColor = [UIColor clearColor];
     _allYouthTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _allYouthTable.contentInset = UIEdgeInsetsMake(-64.0f, 0.0f, 0.0f, 0.0f);
+    //_allYouthTable.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
     [_allYouthTable setDelegate:self];
     [_allYouthTable setDataSource:self];
     [self.view addSubview:_allYouthTable];
