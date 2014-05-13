@@ -100,20 +100,20 @@
 		CF247FC418BC4DCB00FDF0E0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CF2DA2FC18995D6300C5A4E8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CF85585118DE5EC7002533A6 /* ImageSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImageSelectionDelegate.h; path = Protocols/ImageSelectionDelegate.h; sourceTree = "<group>"; };
-		CFBF3F961885B831004CCB51 /* FBC Youth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FBC Youth.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFBF3F961885B831004CCB51 /* Cityouth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cityouth.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFBF3F991885B831004CCB51 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CFBF3F9B1885B831004CCB51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		CFBF3F9D1885B831004CCB51 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		CFBF3FA11885B831004CCB51 /* FBC Youth-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FBC Youth-Info.plist"; sourceTree = "<group>"; };
+		CFBF3FA11885B831004CCB51 /* Cityouth-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Cityouth-Info.plist"; sourceTree = "<group>"; };
 		CFBF3FA31885B831004CCB51 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CFBF3FA51885B831004CCB51 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		CFBF3FA71885B831004CCB51 /* FBC Youth-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FBC Youth-Prefix.pch"; sourceTree = "<group>"; };
+		CFBF3FA71885B831004CCB51 /* Cityouth-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cityouth-Prefix.pch"; sourceTree = "<group>"; };
 		CFBF3FA81885B831004CCB51 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CFBF3FA91885B831004CCB51 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		CFBF3FB11885B831004CCB51 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		CFBF3FB71885B831004CCB51 /* FBC YouthTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FBC YouthTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFBF3FB71885B831004CCB51 /* CityouthTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CityouthTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFBF3FB81885B831004CCB51 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		CFBF3FC01885B831004CCB51 /* FBC YouthTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FBC YouthTests-Info.plist"; sourceTree = "<group>"; };
+		CFBF3FC01885B831004CCB51 /* CityouthTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CityouthTests-Info.plist"; sourceTree = "<group>"; };
 		CFBF3FC21885B831004CCB51 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CFBF3FC41885B831004CCB51 /* FBC_YouthTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBC_YouthTests.m; sourceTree = "<group>"; };
 		CFF073EF191976AE00A7B5A4 /* ProfileTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileTestCase.m; sourceTree = "<group>"; };
@@ -331,8 +331,8 @@
 		CFBF3F971885B831004CCB51 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CFBF3F961885B831004CCB51 /* FBC Youth.app */,
-				CFBF3FB71885B831004CCB51 /* FBC YouthTests.xctest */,
+				CFBF3F961885B831004CCB51 /* Cityouth.app */,
+				CFBF3FB71885B831004CCB51 /* CityouthTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -376,10 +376,10 @@
 		CFBF3FA01885B831004CCB51 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				CFBF3FA11885B831004CCB51 /* FBC Youth-Info.plist */,
+				CFBF3FA11885B831004CCB51 /* Cityouth-Info.plist */,
 				CFBF3FA21885B831004CCB51 /* InfoPlist.strings */,
 				CFBF3FA51885B831004CCB51 /* main.m */,
-				CFBF3FA71885B831004CCB51 /* FBC Youth-Prefix.pch */,
+				CFBF3FA71885B831004CCB51 /* Cityouth-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -397,7 +397,7 @@
 		CFBF3FBF1885B831004CCB51 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				CFBF3FC01885B831004CCB51 /* FBC YouthTests-Info.plist */,
+				CFBF3FC01885B831004CCB51 /* CityouthTests-Info.plist */,
 				CFBF3FC11885B831004CCB51 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -406,9 +406,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CFBF3F951885B831004CCB51 /* FBC Youth */ = {
+		CFBF3F951885B831004CCB51 /* Cityouth */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CFBF3FC81885B831004CCB51 /* Build configuration list for PBXNativeTarget "FBC Youth" */;
+			buildConfigurationList = CFBF3FC81885B831004CCB51 /* Build configuration list for PBXNativeTarget "Cityouth" */;
 			buildPhases = (
 				2DACE5C066CC4DBA971DB98A /* Check Pods Manifest.lock */,
 				CFBF3F921885B831004CCB51 /* Sources */,
@@ -420,14 +420,14 @@
 			);
 			dependencies = (
 			);
-			name = "FBC Youth";
+			name = Cityouth;
 			productName = "FBC Youth";
-			productReference = CFBF3F961885B831004CCB51 /* FBC Youth.app */;
+			productReference = CFBF3F961885B831004CCB51 /* Cityouth.app */;
 			productType = "com.apple.product-type.application";
 		};
-		CFBF3FB61885B831004CCB51 /* FBC YouthTests */ = {
+		CFBF3FB61885B831004CCB51 /* CityouthTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CFBF3FCB1885B831004CCB51 /* Build configuration list for PBXNativeTarget "FBC YouthTests" */;
+			buildConfigurationList = CFBF3FCB1885B831004CCB51 /* Build configuration list for PBXNativeTarget "CityouthTests" */;
 			buildPhases = (
 				CFBF3FB31885B831004CCB51 /* Sources */,
 				CFBF3FB41885B831004CCB51 /* Frameworks */,
@@ -438,9 +438,9 @@
 			dependencies = (
 				CFBF3FBD1885B831004CCB51 /* PBXTargetDependency */,
 			);
-			name = "FBC YouthTests";
+			name = CityouthTests;
 			productName = "FBC YouthTests";
-			productReference = CFBF3FB71885B831004CCB51 /* FBC YouthTests.xctest */;
+			productReference = CFBF3FB71885B831004CCB51 /* CityouthTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -464,7 +464,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CFBF3F911885B830004CCB51 /* Build configuration list for PBXProject "FBC Youth" */;
+			buildConfigurationList = CFBF3F911885B830004CCB51 /* Build configuration list for PBXProject "Cityouth" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -477,8 +477,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CFBF3F951885B831004CCB51 /* FBC Youth */,
-				CFBF3FB61885B831004CCB51 /* FBC YouthTests */,
+				CFBF3F951885B831004CCB51 /* Cityouth */,
+				CFBF3FB61885B831004CCB51 /* CityouthTests */,
 			);
 		};
 /* End PBXProject section */
@@ -600,7 +600,7 @@
 /* Begin PBXTargetDependency section */
 		CFBF3FBD1885B831004CCB51 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = CFBF3F951885B831004CCB51 /* FBC Youth */;
+			target = CFBF3F951885B831004CCB51 /* Cityouth */;
 			targetProxy = CFBF3FBC1885B831004CCB51 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -713,12 +713,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Zachary Stegall (L2NW3G6MD6)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FBC Youth/FBC Youth-Prefix.pch";
+				GCC_PREFIX_HEADER = "FBC Youth/Cityouth-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/Headers\"",
 					"\"${PODS_ROOT}/Headers/AFNetworking\"",
 				);
-				INFOPLIST_FILE = "FBC Youth/FBC Youth-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/FBC Youth/Cityouth-Info.plist";
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -732,7 +732,7 @@
 					SystemConfiguration,
 					"$(inherited)",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Cityouth;
 				PROVISIONING_PROFILE = "05E5176C-399A-41E5-87CC-3B518D2C42A9";
 				WRAPPER_EXTENSION = app;
 			};
@@ -748,12 +748,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Zachary Stegall (L2NW3G6MD6)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FBC Youth/FBC Youth-Prefix.pch";
+				GCC_PREFIX_HEADER = "FBC Youth/Cityouth-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/Headers\"",
 					"\"${PODS_ROOT}/Headers/AFNetworking\"",
 				);
-				INFOPLIST_FILE = "FBC Youth/FBC Youth-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/FBC Youth/Cityouth-Info.plist";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-framework",
@@ -766,7 +766,7 @@
 					SystemConfiguration,
 					"-all_load",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Cityouth;
 				PROVISIONING_PROFILE = "05E5176C-399A-41E5-87CC-3B518D2C42A9";
 				WRAPPER_EXTENSION = app;
 			};
@@ -787,8 +787,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "FBC YouthTests/FBC YouthTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "FBC YouthTests/CityouthTests-Info.plist";
+				PRODUCT_NAME = CityouthTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -805,8 +805,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FBC Youth/FBC Youth-Prefix.pch";
-				INFOPLIST_FILE = "FBC YouthTests/FBC YouthTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "FBC YouthTests/CityouthTests-Info.plist";
+				PRODUCT_NAME = CityouthTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -815,7 +815,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CFBF3F911885B830004CCB51 /* Build configuration list for PBXProject "FBC Youth" */ = {
+		CFBF3F911885B830004CCB51 /* Build configuration list for PBXProject "Cityouth" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CFBF3FC61885B831004CCB51 /* Debug */,
@@ -824,7 +824,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CFBF3FC81885B831004CCB51 /* Build configuration list for PBXNativeTarget "FBC Youth" */ = {
+		CFBF3FC81885B831004CCB51 /* Build configuration list for PBXNativeTarget "Cityouth" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CFBF3FC91885B831004CCB51 /* Debug */,
@@ -833,7 +833,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CFBF3FCB1885B831004CCB51 /* Build configuration list for PBXNativeTarget "FBC YouthTests" */ = {
+		CFBF3FCB1885B831004CCB51 /* Build configuration list for PBXNativeTarget "CityouthTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CFBF3FCC1885B831004CCB51 /* Debug */,

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CFBF3F951885B831004CCB51"
-               BuildableName = "FBC Youth.app"
-               BlueprintName = "FBC Youth"
-               ReferencedContainer = "container:FBC Youth.xcodeproj">
+               BuildableName = "Cityouth.app"
+               BlueprintName = "Cityouth"
+               ReferencedContainer = "container:Cityouth.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CFBF3FB61885B831004CCB51"
-               BuildableName = "FBC YouthTests.xctest"
-               BlueprintName = "FBC YouthTests"
-               ReferencedContainer = "container:FBC Youth.xcodeproj">
+               BuildableName = "CityouthTests.xctest"
+               BlueprintName = "CityouthTests"
+               ReferencedContainer = "container:Cityouth.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CFBF3F951885B831004CCB51"
-            BuildableName = "FBC Youth.app"
-            BlueprintName = "FBC Youth"
-            ReferencedContainer = "container:FBC Youth.xcodeproj">
+            BuildableName = "Cityouth.app"
+            BlueprintName = "Cityouth"
+            ReferencedContainer = "container:Cityouth.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CFBF3F951885B831004CCB51"
-            BuildableName = "FBC Youth.app"
-            BlueprintName = "FBC Youth"
-            ReferencedContainer = "container:FBC Youth.xcodeproj">
+            BuildableName = "Cityouth.app"
+            BlueprintName = "Cityouth"
+            ReferencedContainer = "container:Cityouth.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CFBF3F951885B831004CCB51"
-            BuildableName = "FBC Youth.app"
-            BlueprintName = "FBC Youth"
-            ReferencedContainer = "container:FBC Youth.xcodeproj">
+            BuildableName = "Cityouth.app"
+            BlueprintName = "Cityouth"
+            ReferencedContainer = "container:Cityouth.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
