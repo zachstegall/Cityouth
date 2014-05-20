@@ -26,6 +26,7 @@
       UIRemoteNotificationTypeAlert)];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+//    [[NSUserDefaults standardUserDefaults] setObject:@"MVadminFBC1819" forKey:@"signkey"];
     
     // permission keys
     _youthKey = @"MVyouthFBC";

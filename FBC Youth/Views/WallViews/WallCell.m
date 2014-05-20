@@ -16,8 +16,8 @@
     if (self) {
         // Initialization code
         _message = [[UILabel alloc] initWithFrame:CGRectMake(50.0f, 12.5f, [UIScreen mainScreen].bounds.size.width - 50.0f, 34.0f)];
-        _message.font = [UIFont fontWithName:@"Verdana" size:14];
-        _message.textColor = [UIColor whiteColor];
+        _message.font = [UIFont fontWithName:@"Avenir" size:14];
+        _message.textColor = UIColorFromRGB(0x222222);
         _message.backgroundColor = [UIColor clearColor];
         [self addSubview:_message];
         

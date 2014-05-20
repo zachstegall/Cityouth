@@ -16,7 +16,7 @@
 @property (strong, nonatomic) SignInViewController *sVC;
 @property (strong, nonatomic) NavigationController *navController;
 
-@property NSString *adminKey;
-@property NSString *youthKey;
+@property (strong, nonatomic) NSString *adminKey;
+@property (strong, nonatomic) NSString *youthKey;
 
 @end

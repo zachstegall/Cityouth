@@ -16,6 +16,8 @@
 #import "ToggleDelegate.h"
 #import "Wall.h"
 #import "WriteMessageViewController.h"
+#import "ZSWallTableView.h"
+
 #import "WallPostDelegate.h"
 #import "AskForRideDelegate.h"
 #import "EditTableDelegate.h"
@@ -32,7 +34,7 @@
 @property (nonatomic, strong) NSMutableArray *wallData;
 
 // Controls
-@property (nonatomic, strong) UITableView *wallOfPosts;
+@property (nonatomic, strong) ZSWallTableView *wallOfPosts;
 
 // Delegates
 @property (weak, nonatomic) id <ToggleDelegate> delegate;

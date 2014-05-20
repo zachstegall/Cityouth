@@ -72,7 +72,7 @@
 {
     _signInBtn = [[UIButton alloc] initWithFrame:CGRectMake(20.0f, [UIScreen mainScreen].bounds.size.height - 70.0f, 280.0f, 43.0f)];
     [_signInBtn setTitle:@"sign in" forState:UIControlStateNormal];
-    _signInBtn.titleLabel.font = [UIFont fontWithName:@"Verdana" size:22.0f];
+    _signInBtn.titleLabel.font = [UIFont fontWithName:@"Avenir" size:22.0f];
     _signInBtn.titleLabel.textColor = [UIColor whiteColor];
     _signInBtn.backgroundColor = UIColorFromRGB(0x414141);
     _signInBtn.layer.cornerRadius = 3;
@@ -96,15 +96,15 @@
 -(void)inputAllocation
 {
     _firstName = [[UITextField alloc] initWithFrame:CGRectMake(5, 2, 275, 40)];
-    _firstName.font = [UIFont fontWithName:@"Verdana" size:22.0f];
+    _firstName.font = [UIFont fontWithName:@"Avenir" size:22.0f];
     _firstName.clearButtonMode = UITextFieldViewModeAlways;
     [_firstName setDelegate:self];
     _lastName = [[UITextField alloc] initWithFrame:CGRectMake(5, 2, 275, 40)];
-    _lastName.font = [UIFont fontWithName:@"Verdana" size:22.0f];
+    _lastName.font = [UIFont fontWithName:@"Avenir" size:22.0f];
     _lastName.clearButtonMode = UITextFieldViewModeAlways;
     [_lastName setDelegate:self];
     _key = [[UITextField alloc] initWithFrame:CGRectMake(5, 2, 275, 40)];
-    _key.font = [UIFont fontWithName:@"Verdana" size:22.0f];
+    _key.font = [UIFont fontWithName:@"Avenir" size:22.0f];
     _key.clearButtonMode = UITextFieldViewModeAlways;
     [_key setDelegate:self];
 }

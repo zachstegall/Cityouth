@@ -22,6 +22,8 @@
 		CF1643F918EA125900510A93 /* DefaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CF1643F818EA125900510A93 /* DefaultImage.png */; };
 		CF1643FB18EA23C100510A93 /* ImageChangeSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = CF1643FA18EA23C100510A93 /* ImageChangeSelected.png */; };
 		CF247FC518BC4DCB00FDF0E0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF247FC318BC4DCB00FDF0E0 /* Main.storyboard */; };
+		CF7706841925BFE800A74707 /* ZSWallTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7706831925BFE800A74707 /* ZSWallTableView.m */; };
+		CF7706871925BFF900A74707 /* WallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7706861925BFF900A74707 /* WallCell.m */; };
 		CFBF3F9A1885B831004CCB51 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFBF3F991885B831004CCB51 /* Foundation.framework */; };
 		CFBF3F9C1885B831004CCB51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFBF3F9B1885B831004CCB51 /* CoreGraphics.framework */; };
 		CFBF3F9E1885B831004CCB51 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFBF3F9D1885B831004CCB51 /* UIKit.framework */; };
@@ -34,6 +36,7 @@
 		CFBF3FBB1885B831004CCB51 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFBF3F9D1885B831004CCB51 /* UIKit.framework */; };
 		CFBF3FC31885B831004CCB51 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CFBF3FC11885B831004CCB51 /* InfoPlist.strings */; };
 		CFBF3FC51885B831004CCB51 /* FBC_YouthTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CFBF3FC41885B831004CCB51 /* FBC_YouthTests.m */; };
+		CFE944B61926689F00928107 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFE944B51926689F00928107 /* MessageUI.framework */; };
 		CFF073F0191976AE00A7B5A4 /* ProfileTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF073EF191976AE00A7B5A4 /* ProfileTestCase.m */; };
 		CFFF50EE18CF5CEC007B1168 /* Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFF50ED18CF5CEC007B1168 /* Profile.m */; };
 		CFFF50F318CF5D43007B1168 /* NameLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFF50F018CF5D43007B1168 /* NameLocation.m */; };
@@ -41,7 +44,6 @@
 		CFFF510818CF5DFE007B1168 /* AllYouthCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFF50FF18CF5DFE007B1168 /* AllYouthCell.m */; };
 		CFFF510918CF5DFE007B1168 /* Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFF510118CF5DFE007B1168 /* Cell.m */; };
 		CFFF510A18CF5DFE007B1168 /* ProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFF510318CF5DFE007B1168 /* ProfileCell.m */; };
-		CFFF510C18CF5DFE007B1168 /* WallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFF510718CF5DFE007B1168 /* WallCell.m */; };
 		CFFF511E18CF5EC6007B1168 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFF510E18CF5EC6007B1168 /* HomeViewController.m */; };
 		CFFF511F18CF5EC6007B1168 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFF511018CF5EC6007B1168 /* MenuViewController.m */; };
 		CFFF512018CF5EC6007B1168 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFFF511218CF5EC6007B1168 /* NavigationController.m */; };
@@ -99,6 +101,10 @@
 		CF1643FA18EA23C100510A93 /* ImageChangeSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ImageChangeSelected.png; path = "FBC Youth/images/ImageChangeSelected.png"; sourceTree = "<group>"; };
 		CF247FC418BC4DCB00FDF0E0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CF2DA2FC18995D6300C5A4E8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		CF7706821925BFE800A74707 /* ZSWallTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZSWallTableView.h; path = "FBC Youth/Views/WallViews/ZSWallTableView.h"; sourceTree = "<group>"; };
+		CF7706831925BFE800A74707 /* ZSWallTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZSWallTableView.m; path = "FBC Youth/Views/WallViews/ZSWallTableView.m"; sourceTree = "<group>"; };
+		CF7706851925BFF900A74707 /* WallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WallCell.h; path = "FBC Youth/Views/WallViews/WallCell.h"; sourceTree = "<group>"; };
+		CF7706861925BFF900A74707 /* WallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WallCell.m; path = "FBC Youth/Views/WallViews/WallCell.m"; sourceTree = "<group>"; };
 		CF85585118DE5EC7002533A6 /* ImageSelectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImageSelectionDelegate.h; path = Protocols/ImageSelectionDelegate.h; sourceTree = "<group>"; };
 		CFBF3F961885B831004CCB51 /* Cityouth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cityouth.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFBF3F991885B831004CCB51 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -116,6 +122,7 @@
 		CFBF3FC01885B831004CCB51 /* CityouthTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CityouthTests-Info.plist"; sourceTree = "<group>"; };
 		CFBF3FC21885B831004CCB51 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CFBF3FC41885B831004CCB51 /* FBC_YouthTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBC_YouthTests.m; sourceTree = "<group>"; };
+		CFE944B51926689F00928107 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		CFF073EF191976AE00A7B5A4 /* ProfileTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileTestCase.m; sourceTree = "<group>"; };
 		CFFF50EC18CF5CEC007B1168 /* Profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Profile.h; path = Classes/Profile.h; sourceTree = "<group>"; };
 		CFFF50ED18CF5CEC007B1168 /* Profile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Profile.m; path = Classes/Profile.m; sourceTree = "<group>"; };
@@ -138,8 +145,6 @@
 		CFFF510118CF5DFE007B1168 /* Cell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Cell.m; path = Views/Cell.m; sourceTree = "<group>"; };
 		CFFF510218CF5DFE007B1168 /* ProfileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileCell.h; path = Views/ProfileCell.h; sourceTree = "<group>"; };
 		CFFF510318CF5DFE007B1168 /* ProfileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileCell.m; path = Views/ProfileCell.m; sourceTree = "<group>"; };
-		CFFF510618CF5DFE007B1168 /* WallCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WallCell.h; path = Views/WallCell.h; sourceTree = "<group>"; };
-		CFFF510718CF5DFE007B1168 /* WallCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WallCell.m; path = Views/WallCell.m; sourceTree = "<group>"; };
 		CFFF510D18CF5EC6007B1168 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeViewController.h; path = "FBC Youth/ViewControllers/HomeViewController.h"; sourceTree = "<group>"; };
 		CFFF510E18CF5EC6007B1168 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeViewController.m; path = "FBC Youth/ViewControllers/HomeViewController.m"; sourceTree = "<group>"; };
 		CFFF510F18CF5EC6007B1168 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuViewController.h; path = "FBC Youth/ViewControllers/MenuViewController.h"; sourceTree = "<group>"; };
@@ -180,6 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFE944B61926689F00928107 /* MessageUI.framework in Frameworks */,
 				CF163BA518A6FD6100483E52 /* QuartzCore.framework in Frameworks */,
 				CF06C2111893036C00ACEEEC /* libz.dylib in Frameworks */,
 				CFBF3F9C1885B831004CCB51 /* CoreGraphics.framework in Frameworks */,
@@ -271,18 +277,29 @@
 		CF3E010A18B1CCB400CDF34C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CF77067E1925BEC500A74707 /* WallViews */,
 				CFFF50FE18CF5DFD007B1168 /* AllYouthCell.h */,
 				CFFF50FF18CF5DFE007B1168 /* AllYouthCell.m */,
 				CFFF510018CF5DFE007B1168 /* Cell.h */,
 				CFFF510118CF5DFE007B1168 /* Cell.m */,
 				CFFF510218CF5DFE007B1168 /* ProfileCell.h */,
 				CFFF510318CF5DFE007B1168 /* ProfileCell.m */,
-				CFFF510618CF5DFE007B1168 /* WallCell.h */,
-				CFFF510718CF5DFE007B1168 /* WallCell.m */,
 				806AA50218FC48580001DD87 /* SuccessView.h */,
 				806AA50318FC48580001DD87 /* SuccessView.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		CF77067E1925BEC500A74707 /* WallViews */ = {
+			isa = PBXGroup;
+			children = (
+				CF7706821925BFE800A74707 /* ZSWallTableView.h */,
+				CF7706831925BFE800A74707 /* ZSWallTableView.m */,
+				CF7706851925BFF900A74707 /* WallCell.h */,
+				CF7706861925BFF900A74707 /* WallCell.m */,
+			);
+			name = WallViews;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		CF86B6EF18BBA2B40019C233 /* Classes */ = {
@@ -340,6 +357,7 @@
 		CFBF3F981885B831004CCB51 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CFE944B51926689F00928107 /* MessageUI.framework */,
 				CF163BA418A6FD6100483E52 /* QuartzCore.framework */,
 				CF2DA2FC18995D6300C5A4E8 /* Security.framework */,
 				CF06C2101893036C00ACEEEC /* libz.dylib */,
@@ -453,6 +471,7 @@
 				ORGANIZATIONNAME = "Zach Stegall";
 				TargetAttributes = {
 					CFBF3F951885B831004CCB51 = {
+						DevelopmentTeam = L2NW3G6MD6;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -562,10 +581,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CFFF510C18CF5DFE007B1168 /* WallCell.m in Sources */,
 				CFFF50F318CF5D43007B1168 /* NameLocation.m in Sources */,
 				CFFF50EE18CF5CEC007B1168 /* Profile.m in Sources */,
 				CFFF50F418CF5D43007B1168 /* Wall.m in Sources */,
+				CF7706841925BFE800A74707 /* ZSWallTableView.m in Sources */,
 				CFFF512118CF5EC6007B1168 /* PopupViewController.m in Sources */,
 				CFFF510918CF5DFE007B1168 /* Cell.m in Sources */,
 				CFFF512318CF5EC6007B1168 /* ProfileViewController.m in Sources */,
@@ -575,6 +594,7 @@
 				8022986D18EDDBB600947EE3 /* ImageScale.m in Sources */,
 				CFFF510818CF5DFE007B1168 /* AllYouthCell.m in Sources */,
 				CFBF3FA61885B831004CCB51 /* main.m in Sources */,
+				CF7706871925BFF900A74707 /* WallCell.m in Sources */,
 				CFFF512518CF5EC6007B1168 /* WallViewController.m in Sources */,
 				8099C4FF18F9A929001CC644 /* ImagePresentingViewController.m in Sources */,
 				CFFF512618CF5EC6007B1168 /* WriteMessageViewController.m in Sources */,
@@ -710,7 +730,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Zachary Stegall (L2NW3G6MD6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sandra Stegall (E49RT7955S)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FBC Youth/Cityouth-Prefix.pch";
@@ -733,7 +753,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_NAME = Cityouth;
-				PROVISIONING_PROFILE = "05E5176C-399A-41E5-87CC-3B518D2C42A9";
+				PROVISIONING_PROFILE = "416371F9-03CB-4E2D-8A88-980127910EDB";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -745,7 +765,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Zachary Stegall (L2NW3G6MD6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sandra Stegall (E49RT7955S)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FBC Youth/Cityouth-Prefix.pch";
@@ -767,7 +787,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = Cityouth;
-				PROVISIONING_PROFILE = "05E5176C-399A-41E5-87CC-3B518D2C42A9";
+				PROVISIONING_PROFILE = "416371F9-03CB-4E2D-8A88-980127910EDB";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

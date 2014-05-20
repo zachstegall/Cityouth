@@ -23,6 +23,7 @@
         self.success.textAlignment = NSTextAlignmentCenter;
         self.success.textColor = [UIColor whiteColor];
         self.success.text = @"Success!";
+        self.success.font = [UIFont fontWithName:@"Avenir" size:14];
         [self addSubview:self.success];
         
         self.layer.cornerRadius = 10;

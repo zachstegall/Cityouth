@@ -17,7 +17,7 @@
         // Initialization code
         _textView = [[UITextView alloc] init];
         _textView.editable = NO;
-        _textView.font = [UIFont fontWithName:@"Verdana" size:18.0f];
+        _textView.font = [UIFont fontWithName:@"Avenir" size:18.0f];
         _textView.textColor = [UIColor whiteColor];
         _textView.scrollEnabled = NO;
         _textView.returnKeyType = UIReturnKeyDone;

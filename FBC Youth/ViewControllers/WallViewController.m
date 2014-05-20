@@ -10,28 +10,51 @@
 #import "WallCell.h"
 
 #import <SAMGradientView/SAMGradientView.h>
+#import <MessageUI/MFMessageComposeViewController.h>
 
 @interface WallViewController ()
-{
-    NSString *youthKey;
-    NSString *adminKey;
-    NSInteger toggleView;
-}
-
+@property (nonatomic) NSUInteger toggleView;
+@property (nonatomic) MFMessageComposeViewController *messageVC;
 @end
 
 @implementation WallViewController
+
+NSString *const YOUTH_KEY = @"MVyouthFBC";
+NSString *const ADMIN_KEY = @"MVadminFBC1819";
+
+-(NSUInteger)toggleView
+{
+    if (!_toggleView) _toggleView = 0;
+    return _toggleView;
+}
+
+-(NSMutableArray *)wallData
+{
+    if (!_wallData) {
+        _wallData = [[NSMutableArray alloc] init];
+    }
+    return _wallData;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        youthKey = @"MVyouthFBC";
-        adminKey = @"MVadminFBC1819";
-        toggleView = 0;
-        _wallData = [[NSMutableArray alloc] init];
-        [self MenuViewControllerAllocation];
+        
+        _WriteMessageViewC = [[WriteMessageViewController alloc] init];
+        _WriteMessageViewC.view.tag = 17;
+        _WriteMessageViewC.newsButton.UserInteractionEnabled = YES;
+        _WriteMessageViewC.thoughtButton.UserInteractionEnabled = YES;
+        _WriteMessageViewC.iloveyouButton.UserInteractionEnabled = YES;
+        _WriteMessageViewC.delegate =  self;
+        _WriteMessageViewC.rideDelegate = self;
+        
+        _messageVC = [[MFMessageComposeViewController alloc] init];
+        
+        _MenuViewC = [[MenuViewController alloc] initWithNibName:nil bundle:nil];
+        _MenuViewC.view.frame = CGRectMake(0.0f, -202.0f, [UIScreen mainScreen].bounds.size.width, 202.0f);
+        [self.view addSubview:_MenuViewC.view];
     }
     return self;
 }
@@ -42,58 +65,24 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    _wallOfPosts = [[ZSWallTableView alloc] initWithFrame:CGRectMake(0.0f, 64.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64.0f) style:UITableViewStylePlain];
+    [_wallOfPosts setDataSource:self];
+    [_wallOfPosts setDelegate:self];
+    [self.view addSubview:_wallOfPosts];
     
     UIBarButtonItem *listButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"List.png"] style:UIBarButtonItemStyleDone target:self action:@selector(listPressed:)];
     listButton.tintColor = [UIColor whiteColor];
     [self.navigationItem setLeftBarButtonItem:listButton];
     
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"signkey"] isEqualToString:adminKey]) {
-        UIBarButtonItem *pencilAddButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Pencil.png"] style:UIBarButtonItemStyleDone target:self action:@selector(pencilAddPressed:)];
-        pencilAddButton.tintColor = [UIColor whiteColor];
-        [self.navigationItem setRightBarButtonItem:pencilAddButton];
-    } else {
-        UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Refresh.png"] style:UIBarButtonItemStyleDone target:self action:@selector(refreshPressed:)];
-        refreshButton.tintColor = [UIColor whiteColor];
-        [self.navigationItem setRightBarButtonItem:refreshButton];
-    }
-    
-    [self WriteMessageViewControllerAllocation];
-    [self wallOfPostsAllocation];
+    UIBarButtonItem *pencilAddButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Pencil.png"] style:UIBarButtonItemStyleDone target:self action:@selector(pencilAddPressed:)];
+    pencilAddButton.tintColor = [UIColor whiteColor];
+    [self.navigationItem setRightBarButtonItem:pencilAddButton];
     
     SAMGradientView *gradientView = [[SAMGradientView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.bounds.size.width, self.view.bounds.size.height)];
     gradientView.gradientColors = @[UIColorFromRGB(0xF7941E), UIColorFromRGB(0xF7c41E)];
     [self.view addSubview:gradientView];
     [self.view sendSubviewToBack:gradientView];
     self.view.backgroundColor = UIColorFromRGB(0x222222);
-}
-
--(void)WriteMessageViewControllerAllocation
-{
-    _WriteMessageViewC = [[WriteMessageViewController alloc] init];
-    _WriteMessageViewC.view.tag = 17;
-    [_WriteMessageViewC.newsButton setUserInteractionEnabled:YES];
-    [_WriteMessageViewC.thoughtButton setUserInteractionEnabled:YES];
-    [_WriteMessageViewC.iloveyouButton setUserInteractionEnabled:YES];
-    [_WriteMessageViewC setDelegate:self];
-    [_WriteMessageViewC setRideDelegate:self];
-}
-
--(void)wallOfPostsAllocation
-{
-    _wallOfPosts = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 64.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64.0f) style:UITableViewStylePlain];
-    [_wallOfPosts setSeparatorInset:UIEdgeInsetsZero];
-    self.wallOfPosts.backgroundColor = [UIColor clearColor];
-    [_wallOfPosts setDataSource:self];
-    [_wallOfPosts setDelegate:self];
-    _wallOfPosts.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
-    [self.view addSubview:_wallOfPosts];
-}
-
--(void)MenuViewControllerAllocation
-{
-    _MenuViewC = [[MenuViewController alloc] initWithNibName:nil bundle:nil];
-    _MenuViewC.view.frame = CGRectMake(0.0f, -202.0f, [UIScreen mainScreen].bounds.size.width, 202.0f);
-    [self.view addSubview:_MenuViewC.view];
 }
 
 #pragma mark - Data Collection and Organization
@@ -106,8 +95,8 @@
 
 -(void)setArrayFromDictionary:(NSMutableDictionary *)dict
 {
-    if ([_wallData count] > 0)
-        [_wallData removeAllObjects];
+    if ([self.wallData count] > 0)
+        [self.wallData removeAllObjects];
     
     for (NSInteger i = 0; i < [dict count]; i++) {
         NSString *keyForObject = [NSString stringWithFormat:@"%ld", (long)i];
@@ -117,7 +106,7 @@
         [post setMessage:[item objectForKey:@"message"]];
         [post setIcon:[item objectForKey:@"icon"]];
         
-        [_wallData addObject:post];
+        [self.wallData addObject:post];
     }
 }
 
@@ -187,7 +176,7 @@
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"signkey"] isEqualToString:adminKey])
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"signkey"] isEqualToString:ADMIN_KEY])
         return YES;
     return NO;
 }
@@ -209,14 +198,20 @@
 
 -(void)pencilAddPressed:(id)sender
 {
-    [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
-    if (toggleView == 0) {
-        [self.view addSubview:_WriteMessageViewC.view];
+//    [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
+//    if (self.toggleView == 0) {
+//        [self.view addSubview:_WriteMessageViewC.view];
+//    } else {
+//        [[self.view viewWithTag:17] removeFromSuperview];
+//    }
+    
+    if (self.toggleView == 0) {
+        [self presentViewController:self.messageVC animated:YES completion:nil];
     } else {
-        [[self.view viewWithTag:17] removeFromSuperview];
+        [self.messageVC dismissViewControllerAnimated:YES completion:nil];
     }
     
-    toggleView = (toggleView + 1) % 2;
+    self.toggleView = (self.toggleView + 1) % 2;
 }
 
 -(void)refreshPressed:(id)sender
@@ -230,14 +225,14 @@
 {
     [self.tableDelegate didEditForTable:[NSArray arrayWithObjects:@"insert", message, icon, nil]];
     [[self.view viewWithTag:17] removeFromSuperview];
-    toggleView = 0;
+    self.toggleView = 0;
 }
 
 -(void)didFinishSendingRideQuestion:(NSString *)message
 {
     [self.pushRideDelegate didWantToSendRideQuestion:message];
     [[self.view viewWithTag:17] removeFromSuperview];
-    toggleView = 0;
+    self.toggleView = 0;
 }
 
 #pragma mark - Memory Management

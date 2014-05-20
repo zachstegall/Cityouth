@@ -13,8 +13,6 @@
 -(void)setName:(UILabel *)name
 {
     _name = name;
-    
-    
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -23,7 +21,7 @@
     if (self) {
         // Initialization code
         _name = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 8.0f, [UIScreen mainScreen].bounds.size.width - 50.0f, 34.0f)];
-        _name.font = [UIFont fontWithName:@"Verdana" size:21];
+        _name.font = [UIFont fontWithName:@"Avenir" size:21];
         _name.backgroundColor = [UIColor clearColor];
         [self addSubview:_name];
         

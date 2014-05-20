@@ -17,7 +17,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         _name = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 8.0f, 100.0f, 34.0f)];
-        _name.font = [UIFont fontWithName:@"Verdana" size:21.0f];
+        _name.font = [UIFont fontWithName:@"Avenir" size:21.0f];
         _name.backgroundColor = [UIColor clearColor];
         _name.textColor = [UIColor whiteColor];
         [self addSubview:_name];
